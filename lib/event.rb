@@ -73,5 +73,28 @@ class Event
     today = Date.today
     today.strftime('%d/%m/%Y')
   end
+
+  def sell(item, qty)
+    trucks_selling_item = food_trucks_that_sell(item)
+    return false if trucks_selling_item.length == 0
+
+    def fill_order(qty, trucks, item)
+
+      return false if trucks.length == 0
+
+      cur_truck = trucks[0]
+      qty_in_stock = cur_truck.inventory[item]
+
+      if qty_in_stock >= qty
+        cur_truck.inventory[item] -= qty
+        return true
+      else
+        order_unfilled = qty - qty_in_stock
+        cur_truck.inventory[item] = 0
+        fill_order(order_unfilled, trucks[1..-1], item)
+      end
+    end
+    fill_order(qty, trucks_selling_item, item)
+  end
 end
 
