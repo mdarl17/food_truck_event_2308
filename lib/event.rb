@@ -76,10 +76,10 @@ class Event
 
   def sell(item, qty)
     trucks_selling_item = food_trucks_that_sell(item)
-    
+
     return false if trucks_selling_item.length == 0 || total_inventory[item][:quantity] < qty
 
-    def fill_order(qty, trucks, item)
+    def fill_order(item, qty, trucks)
 
       return false if trucks.length == 0
 
@@ -92,9 +92,9 @@ class Event
       else
         order_unfilled = qty - qty_in_stock
         cur_truck.inventory[item] = 0
-        fill_order(order_unfilled, trucks[1..-1], item)
+        fill_order(item, order_unfilled, trucks[1..-1])
       end
     end
-    fill_order(qty, trucks_selling_item, item)
+    fill_order(item, qty, trucks_selling_item)
   end
 end
